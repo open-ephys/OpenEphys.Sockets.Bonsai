@@ -42,30 +42,30 @@ namespace OpenEphys.Bonsai.EphysSocket
                         //value.Dispose();
                         //value = value_transposed;
 
-                        var header_size = sizeof(int) * 2;
-                        var total_packet_size = value.ElementSize * value.Cols * value.Rows;
-                        var packet_ratio = (total_packet_size + header_size) / MaxPacketSize + 1;
-                        var packet_size = (total_packet_size / packet_ratio) + header_size;
+                        var headerSize = sizeof(int) * 2;
+                        var totalPacketSize = value.ElementSize * value.Cols * value.Rows;
+                        var packetRatio = (totalPacketSize + headerSize) / MaxPacketSize + 1;
+                        var packetSize = (totalPacketSize / packetRatio) + headerSize;
 
-                        for (int i = 0; i < packet_ratio; i++)
+                        for (int i = 0; i < packetRatio; i++)
                         {
-                            var offset = i * (packet_size - header_size);
-                            byte[] offset_bytes = BitConverter.GetBytes(offset);
+                            var offset = i * (packetSize - headerSize);
+                            byte[] offsetBytes = BitConverter.GetBytes(offset);
 
-                            int num_bytes = packet_size - header_size;
-                            byte[] num_bytes_bytes = BitConverter.GetBytes(num_bytes);
+                            int numBytes = packetSize - headerSize;
+                            byte[] numBytesBytes = BitConverter.GetBytes(numBytes);
 
-                            var data = new byte[num_bytes + header_size];
+                            var data = new byte[numBytes + headerSize];
 
-                            System.Buffer.BlockCopy(offset_bytes, 0, data, 0, sizeof(int));
-                            System.Buffer.BlockCopy(num_bytes_bytes, 0, data, sizeof(int), sizeof(int));
+                            System.Buffer.BlockCopy(offsetBytes, 0, data, 0, sizeof(int));
+                            System.Buffer.BlockCopy(numBytesBytes, 0, data, sizeof(int), sizeof(int));
 
-                            for (int j = 0; j < num_bytes; j++)
+                            for (int j = 0; j < numBytes; j++)
                             {
-                                data[header_size + j] = ((byte*)value.Data)[j + offset];
+                                data[headerSize + j] = ((byte*)value.Data)[j + offset];
                             }
 
-                            u.Send(data, num_bytes + header_size);
+                            u.Send(data, numBytes + headerSize);
                         }
                     });
                 });
