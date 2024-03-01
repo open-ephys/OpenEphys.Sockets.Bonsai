@@ -60,10 +60,14 @@ namespace OpenEphys.Bonsai.EphysSocket
                             System.Buffer.BlockCopy(offsetBytes, 0, data, 0, sizeof(int));
                             System.Buffer.BlockCopy(numBytesBytes, 0, data, sizeof(int), sizeof(int));
 
-                            for (int j = 0; j < numBytes; j++)
-                            {
-                                data[headerSize + j] = ((byte*)value.Data)[j + offset];
-                            }
+                            Marshal.Copy(value.Data + offset, data, 0 + headerSize, numBytes);
+
+                            //byte* ptr = (byte*)value.Data;
+
+                            //for (int j = 0; j < numBytes; j++)
+                            //{
+                            //    data[headerSize + j] = ptr[j + offset];
+                            //}
 
                             u.Send(data, numBytes + headerSize);
                         }
