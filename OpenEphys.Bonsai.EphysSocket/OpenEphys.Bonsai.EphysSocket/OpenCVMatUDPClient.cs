@@ -12,7 +12,7 @@ namespace OpenEphys.Bonsai.EphysSocket
 {
     [Combinator]
     [WorkflowElementCategory(ElementCategory.Sink)]
-    [Description("Sends a 2D Open CV Mat to a datagram (UDP) socket.")]
+    [Description("Sends a 2D Open CV Mat to a datagram (UDP) socket. Element type is preserved.")]
     public class OpenCVMatUDPClient : Sink<Mat>
     {
         [Description("Address")]
@@ -21,7 +21,7 @@ namespace OpenEphys.Bonsai.EphysSocket
         [Description("Port number. Changing while running has no effect.")]
         public int Port { get; set; } = 5000;
 
-        internal int MaxPacketSize = 65506; // NB: Max bytes == 65506 for IPv4, not including headers
+        const int MaxPacketSize = 65506; // NB: Max bytes == 65506 for IPv4, not including headers
 
         // Receiver has to provide number of rows and cols
         public unsafe override IObservable<Mat> Process(IObservable<Mat> source)
@@ -37,30 +37,35 @@ namespace OpenEphys.Bonsai.EphysSocket
                 {
                     return source.Do(value =>
                     {
-                        //Mat value_transposed = new Mat(value.Cols, value.Rows, value.Depth, value.Channels);
-                        //CV.Transpose(value, value_transposed);
-                        //value.Dispose();
-                        //value = value_transposed;
+                        const int headerSize = 22;
 
-                        var headerSize = sizeof(int) * 2;
-                        var totalPacketSize = value.ElementSize * value.Cols * value.Rows;
-                        var packetRatio = (totalPacketSize + headerSize) / MaxPacketSize + 1;
-                        var packetSize = (totalPacketSize / packetRatio) + headerSize;
+                        int matrixSize = value.ElementSize * value.Cols * value.Rows;
+                        int packetRatio = ((matrixSize + headerSize) / MaxPacketSize) + 1;
+                        int packetSize = (matrixSize / packetRatio) + headerSize;
+                        int numBytes = packetSize - headerSize;
+
+                        byte[] offsetBytes = BitConverter.GetBytes((Int32)0);
+                        byte[] numBytesBytes = BitConverter.GetBytes(numBytes);
+                        byte[] bitDepthBytes = BitConverter.GetBytes((short)value.Depth);
+                        byte[] elementSizeBytes = BitConverter.GetBytes(value.ElementSize);
+                        byte[] numChannelsBytes = BitConverter.GetBytes(value.Rows);
+                        byte[] numSamplesBytes = BitConverter.GetBytes(value.Cols);
 
                         for (int i = 0; i < packetRatio; i++)
                         {
-                            var offset = i * (packetSize - headerSize);
-                            byte[] offsetBytes = BitConverter.GetBytes(offset);
+                            int offset = i * numBytes;
+                            offsetBytes = BitConverter.GetBytes(offset);
 
-                            int numBytes = packetSize - headerSize;
-                            byte[] numBytesBytes = BitConverter.GetBytes(numBytes);
+                            var packet = new byte[packetSize];
 
-                            var data = new byte[numBytes + headerSize];
+                            System.Buffer.BlockCopy(offsetBytes, 0, packet, 0, 4);
+                            System.Buffer.BlockCopy(numBytesBytes, 0, packet, 4, 4);
+                            System.Buffer.BlockCopy(bitDepthBytes, 0, packet, 8, 2);
+                            System.Buffer.BlockCopy(elementSizeBytes, 0, packet, 10, 4);
+                            System.Buffer.BlockCopy(numChannelsBytes, 0, packet, 14, 4);
+                            System.Buffer.BlockCopy(numSamplesBytes, 0, packet, 18, 4);
 
-                            System.Buffer.BlockCopy(offsetBytes, 0, data, 0, sizeof(int));
-                            System.Buffer.BlockCopy(numBytesBytes, 0, data, sizeof(int), sizeof(int));
-
-                            Marshal.Copy(value.Data + offset, data, 0 + headerSize, numBytes);
+                            Marshal.Copy(value.Data + offset, packet, headerSize, numBytes);
 
                             //byte* ptr = (byte*)value.Data;
 
@@ -69,7 +74,7 @@ namespace OpenEphys.Bonsai.EphysSocket
                             //    data[headerSize + j] = ptr[j + offset];
                             //}
 
-                            u.Send(data, numBytes + headerSize);
+                            u.Send(packet, packetSize);
                         }
                     });
                 });
