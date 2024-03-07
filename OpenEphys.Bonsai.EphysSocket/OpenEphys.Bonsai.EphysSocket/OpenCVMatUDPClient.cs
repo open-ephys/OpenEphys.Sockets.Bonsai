@@ -40,23 +40,24 @@ namespace OpenEphys.Bonsai.EphysSocket
                         const int headerSize = 22;
 
                         int matrixSize = value.ElementSize * value.Cols * value.Rows;
-                        int packetRatio = ((matrixSize + headerSize) / MaxPacketSize) + 1;
-                        int packetSize = (matrixSize / packetRatio) + headerSize;
-                        int numBytes = packetSize - headerSize;
+                        int packetsToSend = (matrixSize / MaxPacketSize) + 1;
+                        int maxPacketSize = MaxPacketSize - headerSize;
 
-                        byte[] offsetBytes = BitConverter.GetBytes((Int32)0);
-                        byte[] numBytesBytes = BitConverter.GetBytes(numBytes);
                         byte[] bitDepthBytes = BitConverter.GetBytes((short)value.Depth);
                         byte[] elementSizeBytes = BitConverter.GetBytes(value.ElementSize);
                         byte[] numChannelsBytes = BitConverter.GetBytes(value.Rows);
                         byte[] numSamplesBytes = BitConverter.GetBytes(value.Cols);
 
-                        for (int i = 0; i < packetRatio; i++)
+                        for (int i = 0; i < packetsToSend; i++)
                         {
-                            int offset = i * numBytes;
-                            offsetBytes = BitConverter.GetBytes(offset);
+                            int offset = i * maxPacketSize;
+                            byte[] offsetBytes = BitConverter.GetBytes(offset);
 
-                            var packet = new byte[packetSize];
+                            int numBytes = matrixSize < maxPacketSize ? matrixSize : 
+                                            matrixSize - offset < maxPacketSize ? matrixSize - offset : maxPacketSize;
+                            byte[] numBytesBytes = BitConverter.GetBytes(numBytes);
+
+                            var packet = new byte[numBytes + headerSize];
 
                             System.Buffer.BlockCopy(offsetBytes, 0, packet, 0, 4);
                             System.Buffer.BlockCopy(numBytesBytes, 0, packet, 4, 4);
@@ -67,14 +68,7 @@ namespace OpenEphys.Bonsai.EphysSocket
 
                             Marshal.Copy(value.Data + offset, packet, headerSize, numBytes);
 
-                            //byte* ptr = (byte*)value.Data;
-
-                            //for (int j = 0; j < numBytes; j++)
-                            //{
-                            //    data[headerSize + j] = ptr[j + offset];
-                            //}
-
-                            u.Send(packet, packetSize);
+                            u.Send(packet, numBytes + headerSize);
                         }
                     });
                 });
