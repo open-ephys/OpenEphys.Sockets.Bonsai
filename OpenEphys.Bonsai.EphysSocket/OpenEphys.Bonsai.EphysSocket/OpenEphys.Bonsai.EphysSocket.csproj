@@ -26,6 +26,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="OpenCVMatUDPClient.cs.wip" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="oe-logo.png">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
