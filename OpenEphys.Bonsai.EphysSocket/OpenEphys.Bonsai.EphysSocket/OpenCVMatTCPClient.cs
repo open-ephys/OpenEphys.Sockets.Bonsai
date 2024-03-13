@@ -21,6 +21,8 @@ namespace OpenEphys.Bonsai.EphysSocket
         [Description("Port number. Changing while running has no effect.")]
         public int Port { get; set; } = 5000;
 
+        private TcpListener listener;
+
         public override IObservable<Mat> Process(IObservable<Mat> source)
         {
             return Observable.Using(
@@ -31,17 +33,26 @@ namespace OpenEphys.Bonsai.EphysSocket
                         Address = "127.0.0.1";
                     }
 
-                    var listener = new TcpListener(IPAddress.Parse(Address), Port);
+                    listener = new TcpListener(IPAddress.Parse(Address), Port);
                     listener.Start();
 
-                    TcpClient client = listener.AcceptTcpClient();
-                    NetworkStream stream = client.GetStream();
-                    return stream;
+                    return Stream.Null;
                 },
                 stream =>
                 {
                     return source.Do(value =>
                     {
+                        if (stream == Stream.Null)
+                        {
+                            if (listener.Pending())
+                            {
+                                stream = listener.AcceptTcpClient().GetStream();
+                            }
+                            else
+                            {
+                                return;
+                            }
+                        }
                         const int headerSize = 22;
 
                         int numBytes = value.ElementSize * value.Cols * value.Rows;
@@ -72,12 +83,12 @@ namespace OpenEphys.Bonsai.EphysSocket
                         }
                         catch (IOException) // NB: Socket was closed
                         {
-                            var listener = new TcpListener(IPAddress.Parse(Address), Port);
-                            listener.Start();
-                            TcpClient client = listener.AcceptTcpClient();
-                            stream = client.GetStream();
+                            stream.Dispose();
+                            stream = Stream.Null;
                         }
-                    });
+                    }).Finally(
+                        () => listener.Stop()
+                    );
                 });
         }
     }
