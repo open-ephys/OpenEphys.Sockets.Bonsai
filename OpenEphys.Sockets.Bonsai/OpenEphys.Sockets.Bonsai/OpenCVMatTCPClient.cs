@@ -42,12 +42,12 @@ namespace OpenEphys.Sockets.Bonsai
 
                         var header = new MatHeader
                         {
-                            numBytes = numBytes,
                             offset = 0,
-                            bitDepth = (short)value.Depth,
+                            numBytes = numBytes,
+                            bitDepth = (int)value.Depth,
                             elementSize = value.ElementSize,
-                            rows = value.Rows,
-                            cols = value.Cols
+                            numChannels = value.Rows,
+                            numSamples = value.Cols
                         };
 
                         var headerArray = Helpers.SerializeValueType(header);
