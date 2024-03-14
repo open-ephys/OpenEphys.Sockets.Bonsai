@@ -17,12 +17,11 @@
     <Version>4.0.0</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <RepositoryUrl>https://github.com/open-ephys/OpenEphys.Bonsai.Utils</RepositoryUrl>
+    <RepositoryUrl>https://github.com/open-ephys/OpenEphys.Sockets.Bonsai</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageIcon>oe-logo.png</PackageIcon>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <TargetFramework>net472</TargetFramework>
-    <!--<TargetFramework>net8.0</TargetFramework>-->
   </PropertyGroup>
 
   <ItemGroup>
