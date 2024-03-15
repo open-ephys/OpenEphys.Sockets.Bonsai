@@ -14,27 +14,14 @@ namespace OpenEphys.Sockets.Bonsai
     [Description("Sends a 2D Open CV Mat to a TCP Socket.")]
     public class SendTcpData : Sink<Mat>
     {
-        [Description("Address")]
-        public string Address { get; set; } = "localhost";
-
-        [Description("Port number. Changing while running has no effect.")]
-        public int Port { get; set; } = 5000;
-
-        private TcpListener listener;
+        [Description("The name of the communication channel to send data over.")]
+        public string Connection { get; set; }  
 
         public override IObservable<Mat> Process(IObservable<Mat> source)
         {
             return Observable.Using(
-                () =>
-                {
-                    var address = Address == "localhost" ? "127.0.0.1" : Address;
-
-                    listener = new TcpListener(IPAddress.Parse(address), Port);
-                    listener.Start();
-
-                    return listener.AcceptTcpClient().GetStream();
-                },
-                stream =>
+                () => TransportManager.ReserveConnection(Connection),
+                connection =>
                 {
                     return source.Do(value =>
                     {
@@ -57,11 +44,8 @@ namespace OpenEphys.Sockets.Bonsai
                         Buffer.BlockCopy(headerArray, 0, data, 0, headerArray.Length);
                         Marshal.Copy(value.Data, data, headerArray.Length, numBytes);
 
-                        stream.Write(data, 0, data.Length);
-
-                    }).Finally(
-                        () => listener.Stop()
-                    );
+                        connection.Transport.SendPacket(writer => writer.Write(data));
+                    });
                 });
         }
     }
