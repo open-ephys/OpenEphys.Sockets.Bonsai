@@ -44,7 +44,7 @@ namespace OpenEphys.Sockets.Bonsai
                         {
                             offset = 0,
                             numBytes = numBytes,
-                            bitDepth = (int)value.Depth,
+                            bitDepth = (short)value.Depth,
                             elementSize = value.ElementSize,
                             numChannels = value.Rows,
                             numSamples = value.Cols
