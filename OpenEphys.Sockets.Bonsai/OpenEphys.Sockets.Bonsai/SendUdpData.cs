@@ -8,12 +8,12 @@ using Bonsai;
 using Bonsai.Reactive;
 using OpenCV.Net;
 
-namespace OpenEphys.Bonsai.EphysSocket
+namespace OpenEphys.Sockets.Bonsai
 {
     [Combinator]
     [WorkflowElementCategory(ElementCategory.Sink)]
     [Description("Sends a 2D Open CV Mat to a datagram (UDP) socket. Element type is preserved.")]
-    public class OpenCVMatUDPClient : Sink<Mat>
+    public class SendUdpData : Sink<Mat>
     {
         [Description("Address")]
         public string Address { get; set; } = "localhost";

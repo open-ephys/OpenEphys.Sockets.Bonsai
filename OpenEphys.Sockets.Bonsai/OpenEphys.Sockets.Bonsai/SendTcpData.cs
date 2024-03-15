@@ -12,7 +12,7 @@ namespace OpenEphys.Sockets.Bonsai
     [Combinator]
     [WorkflowElementCategory(ElementCategory.Sink)]
     [Description("Sends a 2D Open CV Mat to a TCP Socket.")]
-    public class OpenCVMatTCPClient : Sink<Mat>
+    public class SendTcpData : Sink<Mat>
     {
         [Description("Address")]
         public string Address { get; set; } = "localhost";
