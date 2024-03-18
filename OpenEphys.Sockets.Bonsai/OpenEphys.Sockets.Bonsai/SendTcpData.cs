@@ -1,7 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Net;
-using System.Net.Sockets;
 using System.Reactive.Linq;
 using System.Runtime.InteropServices;
 using Bonsai;
@@ -9,7 +7,6 @@ using OpenCV.Net;
 
 namespace OpenEphys.Sockets.Bonsai
 {
-    [Combinator]
     [WorkflowElementCategory(ElementCategory.Sink)]
     [Description("Sends a 2D Open CV Mat to a TCP Socket.")]
     public class SendTcpData : Sink<Mat>

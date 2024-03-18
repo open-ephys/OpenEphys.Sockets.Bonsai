@@ -7,7 +7,6 @@ using OpenCV.Net;
 
 namespace OpenEphys.Sockets.Bonsai
 {
-    [Combinator]
     [WorkflowElementCategory(ElementCategory.Sink)]
     [Description("Sends a 2D Open CV Mat to a datagram (UDP) socket. Element type is preserved.")]
     public class SendUdpData : Sink<Mat>
