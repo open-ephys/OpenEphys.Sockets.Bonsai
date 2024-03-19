@@ -16,7 +16,7 @@ namespace OpenEphys.Sockets.Bonsai
             this.configuration = configuration;
         }
 
-        [Description("The name of the communication channel to reserve for the OSC protocol.")]
+        [Description("The name of the communication channel to reserve.")]
         public string Name
         {
             get { return configuration.Name; }
