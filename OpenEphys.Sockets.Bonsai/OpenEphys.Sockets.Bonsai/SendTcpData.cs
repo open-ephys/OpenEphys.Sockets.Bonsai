@@ -11,6 +11,7 @@ namespace OpenEphys.Sockets.Bonsai
     [Description("Sends a 2D Open CV Mat to a TCP Socket.")]
     public class SendTcpData : Sink<Mat>
     {
+        [TypeConverter(typeof(ConnectionNameConverter))]
         [Description("The name of the communication channel to send data over.")]
         public string Connection { get; set; }  
 
