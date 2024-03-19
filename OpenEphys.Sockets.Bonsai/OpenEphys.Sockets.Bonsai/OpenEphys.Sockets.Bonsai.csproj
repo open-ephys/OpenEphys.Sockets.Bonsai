@@ -25,6 +25,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="SendUdpData.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="oe-logo.png">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
