@@ -16,6 +16,7 @@ namespace OpenEphys.Sockets.Bonsai
         readonly object connectionsLock = new object();
         readonly List<TcpTransport> connections;
         readonly Subject<Message> messageReceived;
+        private readonly bool NoDelay = true;
 
         public TcpServerTransport(TcpListener listener)
         {
@@ -26,6 +27,7 @@ namespace OpenEphys.Sockets.Bonsai
             subscription = Observable
                 .FromAsync(owner.AcceptTcpClientAsync)
                 .Repeat()
+                .Do(client => client.NoDelay = NoDelay)
                 .SelectMany(client => Observable.Using(
                     () => new TcpTransport(client),
                     transport =>
@@ -39,7 +41,6 @@ namespace OpenEphys.Sockets.Bonsai
                     }))
                 .Subscribe(messageReceived);
         }
-
 
         public void SendPacket(Action<DataWriter> writePacket)
         {

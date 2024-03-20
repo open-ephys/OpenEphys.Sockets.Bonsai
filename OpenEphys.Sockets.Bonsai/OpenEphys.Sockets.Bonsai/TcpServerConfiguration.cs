@@ -1,4 +1,6 @@
-﻿using System.Net;
+﻿using Bonsai;
+using System.ComponentModel;
+using System.Net;
 using System.Net.Sockets;
 
 namespace OpenEphys.Sockets.Bonsai
