@@ -3,19 +3,19 @@
 namespace OpenEphys.Sockets.Bonsai
 {
     [Description("Creates a TCP server.")]
-    public class CreateTcpServer : CreateTransport
+    public class TcpServer : CreateTransport
     {
         readonly TcpServerConfiguration configuration;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CreateTcpServer"/> class.
+        /// Initializes a new instance of the <see cref="TcpServer"/> class.
         /// </summary>
-        public CreateTcpServer()
+        public TcpServer()
             : this(new TcpServerConfiguration())
         {
         }
 
-        private CreateTcpServer(TcpServerConfiguration configuration)
+        private TcpServer(TcpServerConfiguration configuration)
             : base(configuration)
         {
             this.configuration = configuration;

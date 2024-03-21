@@ -9,7 +9,7 @@ namespace OpenEphys.Sockets.Bonsai
 {
     [WorkflowElementCategory(ElementCategory.Sink)]
     [Description("Sends a 2D Open CV Mat to a TCP Socket.")]
-    public class SendTcpData : Sink<Mat>
+    public class SendMatOverSocket : Sink<Mat>
     {
         [TypeConverter(typeof(ConnectionNameConverter))]
         [Description("The name of the communication channel to send data over.")]
