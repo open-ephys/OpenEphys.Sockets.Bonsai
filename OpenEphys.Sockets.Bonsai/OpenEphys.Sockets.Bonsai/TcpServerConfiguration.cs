@@ -1,4 +1,5 @@
 ﻿using Bonsai;
+using System;
 using System.ComponentModel;
 using System.Net;
 using System.Net.Sockets;
@@ -12,10 +13,29 @@ namespace OpenEphys.Sockets.Bonsai
 
         internal override ITransport CreateTransport()
         {
+            if (Address == null)
+            {
+                throw new ArgumentException("Address cannot be null", "Address");
+            }
+
+            if (Port < 1024 || Port > 65535)
+            {
+                throw new ArgumentException("Invalid port number given. Must be between 1024 and 65535", "Port");
+            }
+
             var address = Address == "localhost" ? "127.0.0.1" : Address;
 
-            var listener = new TcpListener(IPAddress.Parse(address), Port);
-            return new TcpServerTransport(listener);
+            try
+            {
+                IPAddress parsedAddress = IPAddress.Parse(address);
+
+                var listener = new TcpListener(parsedAddress, Port);
+                return new TcpServerTransport(listener);
+            }
+            catch (FormatException)
+            {
+                throw new ArgumentException("Address is not formatted correctly. ", "Address");
+            }
         }
     }
 }
