@@ -19,6 +19,7 @@ namespace OpenEphys.Sockets.Bonsai
         {
             owner = client;
             stream = client.GetStream();
+            stream.WriteTimeout = 200;
             messageReceived = Observable.Using(
                 () => new EventLoopScheduler(),
                 scheduler => Observable.Create<Message>(observer =>

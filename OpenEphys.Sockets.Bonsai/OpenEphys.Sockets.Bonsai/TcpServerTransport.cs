@@ -53,9 +53,12 @@ namespace OpenEphys.Sockets.Bonsai
                         connection.SendPacket(writePacket);
                         return false;
                     }
+                    catch (IOException) 
+                    {
+                        return false; // NB: Ignore timeout exceptions, connected socket is not processing data yet
+                    }
                     catch (Exception ex)
-                    when (ex is IOException ||
-                          ex is ObjectDisposedException ||
+                    when (ex is ObjectDisposedException ||
                           ex is ArgumentException)
                     {
                         return true;
