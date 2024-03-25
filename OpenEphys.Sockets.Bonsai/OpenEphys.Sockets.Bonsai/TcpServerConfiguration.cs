@@ -15,12 +15,12 @@ namespace OpenEphys.Sockets.Bonsai
         {
             if (Address == null)
             {
-                throw new ArgumentException("Address cannot be null", "Address");
+                throw new ArgumentException("Address cannot be null", nameof(Address));
             }
 
             if (Port < 1024 || Port > 65535)
             {
-                throw new ArgumentException("Invalid port number given. Must be between 1024 and 65535", "Port");
+                throw new ArgumentException("Invalid port number given. Must be between 1024 and 65535", nameof(Port));
             }
 
             var address = Address == "localhost" ? "127.0.0.1" : Address;
@@ -34,7 +34,7 @@ namespace OpenEphys.Sockets.Bonsai
             }
             catch (FormatException)
             {
-                throw new ArgumentException("Address is not formatted correctly. ", "Address");
+                throw new ArgumentException("Address is not formatted correctly. ", nameof(Address));
             }
         }
     }

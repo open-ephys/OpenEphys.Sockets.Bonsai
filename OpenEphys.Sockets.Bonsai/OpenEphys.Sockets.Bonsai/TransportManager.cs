@@ -18,7 +18,7 @@ namespace OpenEphys.Sockets.Bonsai
         {
             if (string.IsNullOrEmpty(name))
             {
-                throw new ArgumentException("A connection name must be specified.", "name");
+                throw new ArgumentException("A connection name must be specified.", nameof(name));
             }
 
             Tuple<ITransport, RefCountDisposable> connection;
