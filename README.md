@@ -1,2 +1,2 @@
-# OpenEphys.Bonsai.EphysSocket
-Bonsai socket utilities for Open Ephys
+# OpenEphys.Sockets.Bonsai
+Bonsai TCP socket for Open Ephys
