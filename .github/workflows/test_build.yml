@@ -1,0 +1,19 @@
+name: test_build
+on:
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - 'main'
+
+jobs:
+  check_version:
+    uses: ./.github/workflows/check_version.yaml
+    with:
+      projectFile: OpenEphys.Sockets.Bonsai/OpenEphys.Sockets.Bonsai/OpenEphys.Sockets.Bonsai.csproj
+  
+  build:
+    uses: ./.github/workflows/build_package.yaml
+    needs: check_version
+    with:
+      solutionFile: ./OpenEphys.Sockets.Bonsai/OpenEphys.Sockets.Bonsai.sln
+      nugetDirecory: ./OpenEphys.Sockets.Bonsai/bin/Release

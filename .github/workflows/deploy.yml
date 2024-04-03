@@ -1,0 +1,35 @@
+name: deploy
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - 'main'
+
+defaults:
+  run:
+    shell: pwsh
+
+jobs:
+  deploy:
+    name: Deploy Package
+    runs-on: windows-2022
+    environment: Production
+
+    steps:
+      - name: Download Artifact
+        run: |
+          repo="${{ github.repository }}"
+          workflow="test_build.yaml"
+          artifact="nuget"
+          run_id=`gh run --repo ${repo} list --workflow ${workflow} --json databaseId --jq .[0].databaseId`
+          gh run --repo ${repo} download ${run_id} -n ${artifact}
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v4
+    
+      - name: Publish NuGet Package
+        run: |
+          dotnet nuget push *.nupkg --api-key "${{ secrets.NUGET_APIKEY }}" --source https://api.nuget.org/v3/index.json
