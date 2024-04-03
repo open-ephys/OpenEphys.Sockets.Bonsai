@@ -25,7 +25,7 @@ jobs:
           gh run --repo ${repo} download ${run_id} -n ${artifact}
         shell: bash
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+          GH_TOKEN: ${{ secrets.GH_PAT }}
 
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v4
