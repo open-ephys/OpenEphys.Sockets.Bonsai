@@ -7,12 +7,12 @@ on:
 
 jobs:
   check_version:
-    uses: ./.github/workflows/check_version.yaml
+    uses: ./.github/workflows/check_version.yml
     with:
       projectFile: OpenEphys.Sockets.Bonsai/OpenEphys.Sockets.Bonsai/OpenEphys.Sockets.Bonsai.csproj
   
   build:
-    uses: ./.github/workflows/build_package.yaml
+    uses: ./.github/workflows/build_package.yml
     needs: check_version
     with:
       solutionFile: ./OpenEphys.Sockets.Bonsai/OpenEphys.Sockets.Bonsai.sln
