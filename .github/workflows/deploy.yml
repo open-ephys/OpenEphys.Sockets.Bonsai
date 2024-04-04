@@ -19,7 +19,7 @@ jobs:
       - name: Download Artifact
         run: |
           repo="${{ github.repository }}"
-          workflow="test_build.yaml"
+          workflow="test_build.yml"
           artifact="nuget"
           run_id=`gh run --repo ${repo} list --workflow ${workflow} --json databaseId --jq .[0].databaseId`
           gh run --repo ${repo} download ${run_id} -n ${artifact}

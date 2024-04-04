@@ -13,7 +13,7 @@ jobs:
   
   build:
     uses: ./.github/workflows/build_package.yml
-    needs: check_version
+    #needs: check_version
     with:
       solutionFile: ./OpenEphys.Sockets.Bonsai/OpenEphys.Sockets.Bonsai.sln
       nugetDirecory: ./OpenEphys.Sockets.Bonsai/bin/Release
