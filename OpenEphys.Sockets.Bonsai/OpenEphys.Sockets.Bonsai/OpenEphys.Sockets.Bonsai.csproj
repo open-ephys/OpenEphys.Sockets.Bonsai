@@ -11,17 +11,22 @@
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageIcon>oe-logo.png</PackageIcon>
     <IncludeSymbols Condition="'$(Configuration)'=='Release'">true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <PackageOutputPath>..\bin\$(Configuration)</PackageOutputPath>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <PackageTags>Bonsai Rx Open Ephys Sockets Interprocess OpenCV</PackageTags>
-    <RepositoryUrl>https://github.com/open-ephys/OpenEphys.Sockets.Bonsai</RepositoryUrl>
+    <RepositoryUrl>https://github.com/open-ephys/OpenEphys.Sockets.Bonsai.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <TargetFramework>net472</TargetFramework>
-    <Version>1.0.0</Version>
+    <Version>1.0.1</Version>
     <Features>strict</Features>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Include="..\..\README.md" Pack="true" PackagePath="\"/>
+  </ItemGroup>
+	
   <ItemGroup>
     <None Include="oe-logo.png">
       <Pack>True</Pack>

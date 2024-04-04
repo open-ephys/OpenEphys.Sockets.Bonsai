@@ -8,8 +8,8 @@ namespace OpenEphys.Sockets.Bonsai
 {
     public class TcpServerConfiguration : TransportConfiguration
     {
-        public string Address;
-        public int Port;
+        public string Address = "localhost";
+        public int Port = 9001;
 
         internal override ITransport CreateTransport()
         {
