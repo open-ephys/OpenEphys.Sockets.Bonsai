@@ -1,4 +1,4 @@
-name: deploy
+name: Deploy Package
 on:
   push:
     branches:
@@ -14,13 +14,13 @@ jobs:
       - name: Download Artifact
         run: |
           repo="${{ github.repository }}"
-          workflow="test_build.yml"
+          workflow="build_and_test.yml"
           artifact="nuget"
           run_id=`gh run --repo ${repo} list --workflow ${workflow} --json databaseId --jq .[0].databaseId`
           gh run --repo ${repo} download ${run_id} -n ${artifact}
         shell: bash
         env:
-          GH_TOKEN: ${{ secrets.GH_PAT }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v4

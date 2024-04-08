@@ -1,0 +1,77 @@
+name: Build and Test Package
+on:
+  pull_request:
+    branches:
+      - 'main'
+
+env:
+  projectFile: OpenEphys.Sockets.Bonsai/OpenEphys.Sockets.Bonsai/OpenEphys.Sockets.Bonsai.csproj
+  solutionFile: OpenEphys.Sockets.Bonsai/OpenEphys.Sockets.Bonsai.sln
+  nugetDirecory: OpenEphys.Sockets.Bonsai/bin/Release
+
+jobs:
+  check_version:
+    name: Check Version Number
+    runs-on: ubuntu-latest
+    environment: Testing
+
+    steps:
+      - name: Checkout current commit
+        uses: actions/checkout@v4
+        with:
+          path: current
+          sparse-checkout: ${{ env.projectFile }}
+
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: 'main'
+          path: main
+          sparse-checkout: ${{ env.projectFile }}
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10.12"
+
+      - name: Install semver
+        run: python -m pip install semver
+    
+      - name: Check version numbers
+        shell: bash
+        run: |
+          version_current=$(grep '<Version>' "./current/${{ env.projectFile }}" | sed "s|^[ ]*||;s|<Version>||;s|</Version>||")
+          version_main=$(grep '<Version>' "./main/${{ env.projectFile }}" | sed "s|^[ ]*||;s|<Version>||;s|</Version>||")
+
+          if [ ! $(python -c "import semver; print(semver.compare(\"$version_current\", \"$version_main\"))") == 1 ]; then
+            echo "::error title=Invalid version number::Version number must be increased on pushes to main"
+            exit 1
+          fi
+
+  build:
+    name: Build Package
+    runs-on: windows-2022
+    environment: Testing
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Setup NuGet
+        uses: NuGet/setup-nuget@v2
+
+      - name: Restore NuGet Packages
+        run: nuget restore ./${{ env.solutionFile }}
+
+      - name: Build Project
+        run: msbuild ./${{ env.solutionFile }} /p:Configuration=Release
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: nuget
+          if-no-files-found: error
+          path: ./${{ env.nugetDirecory }}/*nupkg
