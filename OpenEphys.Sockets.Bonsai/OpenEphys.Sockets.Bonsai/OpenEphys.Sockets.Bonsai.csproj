@@ -19,7 +19,7 @@
     <RepositoryType>git</RepositoryType>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <TargetFramework>net472</TargetFramework>
-    <Version>1.0.1</Version>
+    <Version>1.0.2</Version>
     <Features>strict</Features>
     <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
