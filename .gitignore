@@ -396,3 +396,8 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+# Bonsai folders
+Bonsai/Extensions
+Bonsai/Gallery
+Bonsai/Packages

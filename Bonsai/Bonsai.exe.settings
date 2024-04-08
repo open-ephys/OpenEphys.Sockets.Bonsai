@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<EditorSettings>
+  <WindowState>Normal</WindowState>
+  <EditorTheme>Light</EditorTheme>
+  <AnnotationPanelSize>351</AnnotationPanelSize>
+  <DesktopBounds>
+    <X>379</X>
+    <Y>318</Y>
+    <Width>1120</Width>
+    <Height>450</Height>
+  </DesktopBounds>
+  <RecentlyUsedFiles>
+    <RecentlyUsedFile>
+      <Timestamp>2024-04-08T10:12:52.0277532-04:00</Timestamp>
+      <Name>C:\Users\brand\public\OEPlugins\ephys-socket\Resources\test-ephys-socket-with-function-generator.bonsai</Name>
+    </RecentlyUsedFile>
+    <RecentlyUsedFile>
+      <Timestamp>2024-04-08T10:10:32.4529327-04:00</Timestamp>
+      <Name>C:\Users\brand\public\OpenEphys.Sockets.Bonsai\Bonsai\Gallery\Bonsai.Examples.Ephys\Bonsai.Examples.Ephys.bonsai</Name>
+    </RecentlyUsedFile>
+  </RecentlyUsedFiles>
+</EditorSettings>
