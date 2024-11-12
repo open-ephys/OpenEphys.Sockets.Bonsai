@@ -90,10 +90,8 @@ namespace OpenEphys.Sockets.Bonsai
 
             lock (stream)
             {
-                using (var writer = new DataWriter(stream, true))
-                {
-                    writer.Write(buffer);
-                }
+                using var writer = new DataWriter(stream, true);
+                writer.Write(buffer);
             }
         }
 

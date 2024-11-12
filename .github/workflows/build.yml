@@ -1,0 +1,16 @@
+name: Build .NET and Publish to Nuget
+
+# This workflow will run when: 1) any commit is pushed to main, 2) any pull request is opened that will merge to main, and 3) whenever a new release is published.
+on:
+  push:
+    branches: [main] # 1) Generates a package on Github that is a pre-release package, and is typically named X.Y.Z-main-ci000, where X/Y/Z are the semantic version numbers, and ci000 is incremented for each action that is run, guaranteeing a unique package name
+  pull_request:
+    branches: [main] # 2) Does not generate a package, but does check that the semantic version number is increasing, and that the package builds correctly in all matrix configurations (Ubuntu / Windows and Release / Debug)
+  release:
+    types: [published] # 3) Generates a package that is a full release package (X.Y.Z) that is published to Github and NuGet automatically
+
+jobs:
+  build_and_publish:
+    uses: open-ephys/github-actions/.github/workflows/build_dotnet_publish_nuget.yml@main
+    secrets:
+      NUGET_APIKEY: ${{ secrets.NUGET_APIKEY }}

@@ -13,7 +13,7 @@ namespace OpenEphys.Sockets.Bonsai
     {
         IDisposable subscription;
         readonly TcpListener owner;
-        readonly object connectionsLock = new object();
+        readonly object connectionsLock = new();
         readonly List<TcpTransport> connections;
         readonly Subject<Message> messageReceived;
         private readonly bool NoDelay = true;
@@ -53,7 +53,7 @@ namespace OpenEphys.Sockets.Bonsai
                         connection.SendPacket(writePacket);
                         return false;
                     }
-                    catch (IOException) 
+                    catch (IOException)
                     {
                         return false; // NB: Ignore timeout exceptions, connected socket is not processing data yet
                     }

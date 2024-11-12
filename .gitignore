@@ -398,6 +398,7 @@ FodyWeavers.xsd
 *.sln.iml
 
 # Bonsai folders
-Bonsai/Extensions
-Bonsai/Gallery
-Bonsai/Packages
+.bonsai/Packages/
+.bonsai/*.exe
+.bonsai/*.exe.settings
+.bonsai/*.exe.WebView2/
