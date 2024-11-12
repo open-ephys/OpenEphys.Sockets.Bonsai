@@ -6,8 +6,8 @@ namespace OpenEphys.Sockets.Bonsai
 {
     internal static class TransportManager
     {
-        static readonly Dictionary<string, Tuple<ITransport, RefCountDisposable>> openConnections = new Dictionary<string, Tuple<ITransport, RefCountDisposable>>();
-        static readonly object openConnectionsLock = new object();
+        static readonly Dictionary<string, Tuple<ITransport, RefCountDisposable>> openConnections = new();
+        static readonly object openConnectionsLock = new();
 
         public static TransportDisposable ReserveConnection(string name)
         {

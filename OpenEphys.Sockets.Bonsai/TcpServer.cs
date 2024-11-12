@@ -2,6 +2,9 @@
 
 namespace OpenEphys.Sockets.Bonsai
 {
+    /// <summary>
+    /// Creates a TCP server to send data through.
+    /// </summary>
     [Description("Creates a TCP server.")]
     public class TcpServer : CreateTransport
     {
@@ -21,6 +24,9 @@ namespace OpenEphys.Sockets.Bonsai
             this.configuration = configuration;
         }
 
+        /// <summary>
+        /// The port on which to listen for incoming connection attempts.
+        /// </summary>
         [Description("The port on which to listen for incoming connection attempts.")]
         public int Port
         {
@@ -28,6 +34,10 @@ namespace OpenEphys.Sockets.Bonsai
             set { configuration.Port = value; }
         }
 
+        /// <summary>
+        /// The address of the host to connect to.
+        /// </summary>
+        /// <remarks>Can be "localhost" for local communication.</remarks>
         [Description("The address of the host to connect to. Can be \"localhost\" for local communication.")]
         public string Address
         {
